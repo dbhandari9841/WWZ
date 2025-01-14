@@ -20,7 +20,7 @@
 #include <iostream>
 #include <fstream> //specifying name
 using namespace std;
-//c
+//cdddd
 double MUON_MASS = 105.6583745*10e-03;
 
 bool sameVal(double a, double b)
@@ -686,11 +686,12 @@ int ReadWZZ_Delphes_ML_ForDipesh(std::string infile, std::string outfile){
 
     double inv_mass = (W1+Z1+Z2).M();
     input_csv << (W1+Z1+Z2).M() << "," << ST << std::endl;//for leptons
+    //pT, azimuthal angle, eta
   }//event loop closed
   std::string histfilename=(outfile+".root").c_str();
   TFile *tFile=new TFile(histfilename.c_str(), "RECREATE");
   h_VVV_Mass->Write();
-  //h_ST->Write();
+  //h_ST->Write();  
   h_nleptons->Write();
   //h_nmuons->Write();//here
   tFile->Close();
