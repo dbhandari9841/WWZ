@@ -683,16 +683,19 @@ int ReadWZZ_Delphes_ML_ForDipesh(std::string infile, std::string outfile){
     ST += MET; 
 
     h_ST->Fill(ST);
-
     double inv_mass = (W1+Z1+Z2).M();
-    //for (unsigned int j=0; j<jet_pt->size(); ++j)
-    if (std::abs(pdgid.at(i)) == 11){
-    input_csv << (W1+Z1+Z2).M() << "," << ST << electrons.at(i).pT << "," << electrons.at(i).eta << "," << electrons.at(i).phi << "," << 0 << "," << 0 << "," << 0 << std::endl;//for electron}
+    for (unsigned int c = 0; c < lepton_vector.size(); ++c) {
     
-    else if(std::abs(pdgid.at(i)) == 13){ 
-    input_csv << (W1+Z1+Z2).M() << "," << ST << 0 << "," << 0 << "," << 0 << "," << muons.at(i).pT << "," << muons.at(i).eta << "," << muons.at(i).phi << std::endl;//for muon}
+    //check based on mass, not pdgid, struct doesn't have that
+    if (std::abs(lepton_vector.at(c).leptonLV.M() - 0.000511) < 1e-6) { //we defined the mass in lv, <tolerance value
+        input_csv <<inv_mass<< "," <<ST<< ","<< lepton_vector.at(c).pT << "," << lepton_vector.at(c).eta << "," << lepton_vector.at(c).phi << ","
+                  << 0 << "," << 0 << "," << 0 << std::endl;
+    } else if (std::abs(lepton_vector.at(c).leptonLV.M() - 0.1056) < 1e-3) { 
+        input_csv <<inv_mass<< ","<< ST << ","<< 0 << "," << 0 << "," << 0 << ","
+                  << lepton_vector.at(c).pT << "," << lepton_vector.at(c).eta << "," << lepton_vector.at(c).phi << std::endl;
     }
     //pT, azimuthal angle, eta
+  } //internal loop for lepton vector, needed because we need to look at each lepton of the each event
   }//event loop closed
   std::string histfilename=(outfile+".root").c_str();
   TFile *tFile=new TFile(histfilename.c_str(), "RECREATE");
