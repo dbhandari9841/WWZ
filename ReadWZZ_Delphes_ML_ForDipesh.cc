@@ -685,7 +685,13 @@ int ReadWZZ_Delphes_ML_ForDipesh(std::string infile, std::string outfile){
     h_ST->Fill(ST);
 
     double inv_mass = (W1+Z1+Z2).M();
-    input_csv << (W1+Z1+Z2).M() << "," << ST << std::endl;//for leptons
+    //for (unsigned int j=0; j<jet_pt->size(); ++j)
+    if (std::abs(pdgid.at(i)) == 11){
+    input_csv << (W1+Z1+Z2).M() << "," << ST << electrons.at(i).pT << "," << electrons.at(i).eta << "," << electrons.at(i).phi << "," << 0 << "," << 0 << "," << 0 << std::endl;//for electron}
+    
+    else if(std::abs(pdgid.at(i)) == 13){ 
+    input_csv << (W1+Z1+Z2).M() << "," << ST << 0 << "," << 0 << "," << 0 << "," << muons.at(i).pT << "," << muons.at(i).eta << "," << muons.at(i).phi << std::endl;//for muon}
+    }
     //pT, azimuthal angle, eta
   }//event loop closed
   std::string histfilename=(outfile+".root").c_str();
